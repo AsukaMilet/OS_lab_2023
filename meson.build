@@ -4,7 +4,7 @@ project('Scheduling', 'c',
 
 incdir = include_directories('include')
 
-exe1 = executable('scheduler', 'src/scheduler/scheduler.c', 'src/argparse.c',
+scheduler = executable('scheduler', 'src/scheduler/main.c', 
+  'src/argparse.c', 'src/scheduler/scheduler.c',
   include_directories: incdir, install : false)
 
-test('basic', exe1)

@@ -8,3 +8,4 @@ scheduler = executable('scheduler', 'src/scheduler/main.c',
   'src/argparse.c', 'src/scheduler/scheduler.c',
   include_directories: incdir, install : false)
 
+test('scheduler_test', scheduler)

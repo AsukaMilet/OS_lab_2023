@@ -4,7 +4,7 @@
 #include "scheduler.h"
 
 int main(int argc, const char *argv[]) {
-  if (argc < 4) {
+  if (argc == 1) {
     fprintf(stderr, "Usage: scheduler --the number of Jobs --random seed --policy --time slice\n");
     exit(EXIT_FAILURE);
   }

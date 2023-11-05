@@ -50,27 +50,27 @@ Policy get_policy(const char *policy) {
 }
 
 void fifo_statistics(Job *joblist, int jobnum) {
-  int thetime = 0;
+  int currtime = 0;  // Current time
   int turnaroundSum = 0, waitSum = 0, responseSum = 0;
   int response = 0, wait = 0, turnaround = 0;  // Current process response, wait, turnaround time
 
   for (int i = 0; i < jobnum; i++) {
-    printf("[time %6d ] Run process %d for %d secs (Finished at %d)\n", thetime, joblist[i].pid, joblist[i].runtime,
-          thetime + joblist[i].runtime);
-    thetime += joblist[i].runtime;
+    printf("[time %6d ] Run process %d for %d secs (Finished at %d)\n", currtime, joblist[i].pid, joblist[i].runtime,
+          currtime + joblist[i].runtime);
+    currtime += joblist[i].runtime;
   }
 
-  thetime = 0;
+  currtime = 0;
   printf("\nFinal Statistics:\n");
   for (int i = 0; i < jobnum; i++) {
-    response = thetime;
-    turnaround = thetime + joblist[i].runtime;
-    wait = thetime;
+    response = currtime;
+    turnaround = currtime + joblist[i].runtime;
+    wait = currtime;
     printf("Process %3d -- Response: %6d, Wait: %6d, Turnaround: %6d\n", joblist[i].pid, response, wait, turnaround);
     responseSum += response;
     turnaroundSum += turnaround;
     waitSum += wait;
-    thetime += joblist[i].runtime;
+    currtime += joblist[i].runtime;
   }
   printf("Average Response: %6d, Average Wait: %6d, Average Turnaround: %6d\n", responseSum / jobnum, waitSum / jobnum,
         turnaroundSum / jobnum);

@@ -20,5 +20,7 @@ void fifo_statistics(Job *joblist, int jobnum);
 
 void sjf_statistics(Job *joblist, int jobnum);
 
+void sjf_sort(Job *joblist, int jobnum);
+
 void rr_statistics(Job *joblist, int jobnum);
 #endif

@@ -75,3 +75,17 @@ void fifo_statistics(Job *joblist, int jobnum) {
   printf("Average Response: %6d, Average Wait: %6d, Average Turnaround: %6d\n", responseSum / jobnum, waitSum / jobnum,
         turnaroundSum / jobnum);
 }
+
+void sjf_sort(Job *joblist, int jobnum) {
+  for (int i = 1; i < jobnum; i++) {
+    Job temp = joblist[i];
+    int j = i - 1;
+
+    while (j >= 0 && joblist[j].runtime > temp.runtime) {
+      joblist[j + 1] = joblist[j];
+      j--;
+    }
+
+    joblist[j + 1] = temp;
+  }
+}

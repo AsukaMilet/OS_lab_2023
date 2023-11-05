@@ -36,15 +36,23 @@ int main(int argc, const char *argv[]) {
       fifo_statistics(joblist, jobnum);
     } break;
     case SJF: {
+      // For Shortest job first, just sort the original job queue and execute FIFO policy
       char policy[] = "SJF";
       printf("Current Policy: %s\n", policy);
       print_joblist(joblist, jobnum);
+      sjf_sort(joblist, jobnum);
+      printf("\n\n");
+      fifo_statistics(joblist, jobnum);
     } break;
     case RR: {
       char policy[] = "RR";
       printf("Current Policy: %s\n", policy);
       print_joblist(joblist, jobnum);
     } break;
+    default: {
+      fprintf(stderr, "Invalid policy: %s\n", policy_name);
+      exit(EXIT_FAILURE);
+    }
   }
   free(joblist);  // Free the memory to avoid memory leak
   return 0;

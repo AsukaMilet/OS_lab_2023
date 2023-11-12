@@ -3,7 +3,7 @@
 
 #define MAXNUM 10
 
-typedef enum Policy { FIFO, SJF, RR } Policy;
+typedef enum Policy { FIFO, SJF, RR, MLFQ } Policy;
 
 typedef struct Job {
   unsigned int pid;      // Simulate the process id in the system
@@ -21,4 +21,6 @@ void fifo_statistics(Job *joblist, int jobnum);
 void sjf_sort(Job *joblist, int jobnum);
 
 void rr_statistics(Job *joblist, int jobnum, int time_slice);
+
+void mlfq_statistics(Job *joblist, int jobnum, int time_slice);
 #endif

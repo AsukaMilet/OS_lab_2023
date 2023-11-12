@@ -55,9 +55,10 @@ int main(int argc, const char *argv[]) {
       printf("\n\n");
       rr_statistics(joblist, jobnum, time_slice);
     } break;
-    default: {
-      fprintf(stderr, "Invalid policy: %s\n", policy_name);
-      exit(EXIT_FAILURE);
+    case MLFQ: {
+      char policy[] = "MLFQ";
+      printf("Current Policy: %s\n", policy);
+      print_joblist(joblist, jobnum);
     }
   }
   free(joblist);  // Free the memory to avoid memory leak

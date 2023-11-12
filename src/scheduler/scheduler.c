@@ -53,6 +53,13 @@ Policy get_policy(const char *policy) {
   if (strcmp(policy, "RR") == 0) {
     return RR;
   }
+  if(strcmp(policy, "MLFQ") == 0) {
+    return MLFQ;
+  }
+  else {
+    fprintf(stderr, "Invalid policy: %s\n", policy);
+    exit(EXIT_FAILURE);
+  }
 }
 
 void fifo_statistics(Job *joblist, int jobnum) {
@@ -104,6 +111,7 @@ void rr_statistics(Job *joblist, int jobnum, int time_slice) {
 
   int currtime = 0;    // Current time of execution
   int round_time = 0;  // Current round time
+  
   //  Initialize the queue of processes
   cdeq_job jobs = cdeq_job_init();
   for (int i = 0; i < jobnum; i++) {

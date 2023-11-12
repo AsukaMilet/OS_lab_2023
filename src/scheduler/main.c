@@ -40,7 +40,7 @@ int main(int argc, const char *argv[]) {
       fifo_statistics(joblist, jobnum);
     } break;
     case SJF: {
-      // For Shortest job first, just sort the original job queue and execute FIFO policy
+      // For Shortest job first, just sort the original job queue by runtime and execute FIFO policy
       char policy[] = "SJF";
       printf("Current Policy: %s\n", policy);
       print_joblist(joblist, jobnum);
@@ -52,6 +52,8 @@ int main(int argc, const char *argv[]) {
       char policy[] = "RR";
       printf("Current Policy: %s\n", policy);
       print_joblist(joblist, jobnum);
+      printf("\n\n");
+      rr_statistics(joblist, jobnum, time_slice);
     } break;
     default: {
       fprintf(stderr, "Invalid policy: %s\n", policy_name);

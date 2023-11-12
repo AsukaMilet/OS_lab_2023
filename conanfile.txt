@@ -1,0 +1,5 @@
+[requires]
+stc/4.2
+[generators]
+PkgConfigDeps
+MesonToolchain

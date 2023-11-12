@@ -4,8 +4,10 @@ project('Scheduling', 'c',
 
 incdir = include_directories('include')
 
+stc = dependency('stc', version: '4.2')
+
 scheduler = executable('scheduler', 'src/scheduler/main.c', 
   'src/argparse.c', 'src/scheduler/scheduler.c',
-  include_directories: incdir, install : false)
+  include_directories: incdir, dependencies: [stc])
 
 test('scheduler_test', scheduler)

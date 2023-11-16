@@ -230,7 +230,7 @@ void mlfq_statistics(Job *joblist, int jobnum, int numQueues, int time_slice, in
     Job *job = JobDeque_front(curr_queue);
     JobDeque_pop_front(curr_queue);
 
-    if(response_times[job->pid] == -1) {
+    if (response_times[job->pid] == -1) {
       response_times[job->pid] = currtime;
     }
 

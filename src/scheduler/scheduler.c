@@ -2,7 +2,7 @@
  * @file scheduler.c
  * @author 计21-1 戴杰 20101050226
  * @brief 允许模拟测试四种不同的调度策略：FIFO, RR, SJF, MLFQ
- * 为了简单起见，在MLFQ策略中每个队列的时间片增长500, 不考虑I/O和yield
+ * 为了简单起见，在MLFQ策略中每个队列的时间片相对上一级队列增加500, 1/10的概率来模拟I/O(yield)
  * @version 0.1
  * @date 2023-10-30(create)
  * @copyright Copyright (c) 2023
@@ -102,6 +102,7 @@ void sjf_sort(Job *joblist, int jobnum) {
 }
 
 void rr_statistics(Job *joblist, int jobnum, int time_slice) {
+  srand((unsigned int)time(NULL));
   // Initialize the turnaround time of each process
   int *turnaround_time = (int *)malloc(sizeof(int) * jobnum);
   memset(turnaround_time, 0, sizeof(int) * jobnum);
@@ -130,11 +131,22 @@ void rr_statistics(Job *joblist, int jobnum, int time_slice) {
     }
     // If process can't be finished in the current time slice
     if (runtime > time_slice) {
-      job->runtime = job->runtime - time_slice;
-      round_time = time_slice;
-      printf("[time %6d ] Run process %d for %d secs\n", currtime, pid, round_time);
-      // Push the process to the tail of the queue
-      JobDeque_push_back(&jobs, *job);
+      int is_yield = rand() % 10;  // 10% chance of yielding to simulate I/O
+      if (is_yield == 0) {
+        // If current process yield. To make life easier, when it runs half of the current time slice, it will yield
+        job->runtime = job->runtime - time_slice / 2;
+        round_time = time_slice / 2;
+        printf("[time %6d ] Run process %d for %d secs\n", currtime, pid, round_time);
+        printf("process %d yields\n", job->pid);
+        // Push the process to the tail of the queue
+        JobDeque_push_back(&jobs, *job);
+      } else {
+        // Current process doesn't yield
+        round_time = time_slice;
+        printf("[time %6d ] Run process %d for %d secs\n", currtime, pid, round_time);
+        // Push the process to the tail of the queue
+        JobDeque_push_back(&jobs, *job);
+      }
     }
     // Process can be finished in the current time slice
     else {

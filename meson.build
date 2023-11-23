@@ -6,8 +6,9 @@ incdir = include_directories('include')
 
 stc = dependency('stc', version: '4.2')
 
-scheduler = executable('scheduler', 'src/scheduler/process.c', 
+executable('scheduler', 'src/scheduler/process.c', 
   'src/argparse.c', 'src/scheduler/scheduler.c',
   include_directories: incdir, dependencies: [stc])
 
-test('scheduler_test', scheduler)
+executable('memory', 'src/memory/memory.c', 'src/memory/replacer.c',
+  include_directories: incdir, dependencies: [stc])

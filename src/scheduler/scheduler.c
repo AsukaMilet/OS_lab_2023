@@ -122,7 +122,7 @@ void rr_statistics(Job *joblist, int jobnum, int time_slice) {
 
   while (!JobDeque_empty(&jobs)) {
     Job *job = *JobDeque_front(&jobs);  // Get the first process in the queue
-    JobDeque_pop_front(&jobs);         // Pop the process from the queue
+    JobDeque_pop_front(&jobs);          // Pop the process from the queue
 
     int pid = job->pid;
     int runtime = job->runtime;

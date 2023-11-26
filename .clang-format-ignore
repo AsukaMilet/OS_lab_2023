@@ -1,0 +1,2 @@
+# Skip all third party dependencies
+third_party/**/*

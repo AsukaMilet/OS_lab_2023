@@ -11,54 +11,54 @@
 
 typedef int32_t frame_id_t;
 
-typedef struct LRUKNode {
+typedef struct Frame {
   UIList history_;
   size_t k_;
   frame_id_t fid_;
   bool is_evictable_;
-} LRUKNode;
+} Frame;
 
 //===----------------------------------------------------------------------===//
-// LRUKNode statement
+// Frame statement
 //===----------------------------------------------------------------------===//
-LRUKNode LRUKNodeInit(size_t k, frame_id_t fid);
+Frame FrameInit(size_t k, frame_id_t fid);
 
-LRUKNode LRUKNode_clone(LRUKNode node);
+Frame Frame_clone(Frame node);
 
-// Destructor for LRUKNode
-void LRUKNodeDestroy(LRUKNode *node);
+// Destructor for Frame
+void FrameDestroy(Frame *node);
 
 // Check whether a frame is evictable
-bool IsEvictable(LRUKNode *node);
+bool IsEvictable(Frame *node);
 
 // Set whether a frame is evictable
-void SetEvictable(LRUKNode *node, bool set_evictable);
+void SetEvictable(Frame *node, bool set_evictable);
 
 // Record the access for the given frame
-void FrameAccessed(LRUKNode *node, size_t timestamp);
+void FrameAccessed(Frame *node, size_t timestamp);
 
 // Get the number of access for the given frame
-size_t TimestampNum(LRUKNode *node);
+size_t TimestampNum(Frame *node);
 
 // Get the earliest access for the given frame
-size_t OldestTimestamp(LRUKNode *node);
+size_t OldestTimestamp(Frame *node);
 
-frame_id_t GetFrameId(LRUKNode *node);
+frame_id_t GetFrameId(Frame *node);
 
 // Get the kth access for the given frame
-size_t KthTimestamp(LRUKNode *node);
+size_t KthTimestamp(Frame *node);
 //===----------------------------------------------------------------------===//
 // Replacer statement
 //===----------------------------------------------------------------------===//
-#define i_type HashTable
+#define i_type FrameTable
 #define i_key frame_id_t
-#define i_valclass LRUKNode
-#define i_valclone LRUKNode_clone
-#define i_valdrop LRUKNodeDestroy
+#define i_valclass Frame
+#define i_valclone Frame_clone
+#define i_valdrop FrameDestroy
 #include "stc/cmap.h"
 
 typedef struct LRUKReplacer {
-  HashTable node_store_;
+  FrameTable node_store_;
   size_t current_timestamp_;
   size_t curr_size_;      // The number of evictable frames
   size_t replacer_size_;  // Maximum number of frames in the replacer
@@ -82,11 +82,38 @@ void ReplacerDestroy(Replacer *replacer);
 bool ReplacerEvict(Replacer *replacer, frame_id_t *fid);
 
 // Record the access of a frame
-void ReplacerRecordAccess(Replacer *replacer, frame_id_t fid);
+void ReplacerRecordAccess(Replacer *replacer, frame_id_t frame_id);
 
 // Toggle whether a frame is evictable or non-evictable
-void ReplacerSetEvictable(Replacer *replacer, frame_id_t fid, bool set_evictable);
+void ReplacerSetEvictable(Replacer *replacer, frame_id_t frame_id, bool set_evictable);
 
 // Return replacer's size, which tracks the number of evictable frames
 size_t ReplacerSize(Replacer *replacer);
+//===----------------------------------------------------------------------===//
+// FIFO Replacer statement
+//===----------------------------------------------------------------------===//
+typedef struct FIFOReplacer {
+  FrameTable node_store_;
+  size_t current_timestamp_;
+  size_t curr_size_;      // The number of evictable frames
+  size_t replacer_size_;  // Maximum number of frames in the replacer
+} FIFOReplacer;
+
+// Initialize the replacer
+FIFOReplacer *FIFOReplacerInit(size_t num_frames);
+
+// Destroy the replacer to avoid memory leak
+void FIFOReplacerDestroy(FIFOReplacer *replacer);
+
+// Evict the frame with earliest timestamp
+bool FIFOReplacerEvict(FIFOReplacer *replacer, frame_id_t *frame_id);
+
+// Record the access of a frame
+void FIFOReplacerRecordAccess(FIFOReplacer *replacer, frame_id_t frame_id);
+
+// Toggle whether a frame is evictable or non-evictable
+void FIFOReplacerSetEvictable(FIFOReplacer *replacer, frame_id_t frame_id, bool set_evictable);
+
+// Return replacer's size, which tracks the number of evictable frames
+size_t FIFOReplacerSize(FIFOReplacer *replacer);
 #endif

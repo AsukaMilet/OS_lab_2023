@@ -1,5 +1,5 @@
 project('Scheduling', 'c',
-  version : '0.3',
+  version : '0.6',
   default_options : ['warning_level=3', 'c_std=c17'])
 
 incdir = include_directories('include')
@@ -10,5 +10,5 @@ executable('scheduler', 'src/scheduler/process.c',
   include_directories: [incdir, thirdparty])
 
 executable('memory', 'src/memory/memory.c', 'src/memory/replacer.c',
-  'src/argparse.c',
+  'src/argparse.c', 'src/memory/buffer_manager.c',
   include_directories: [incdir, thirdparty])

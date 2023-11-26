@@ -17,7 +17,7 @@
 #include <time.h>
 
 #define i_type VecDeque
-#define i_keyclass JobDeque
+#define i_key_class JobDeque
 #include "stc/cvec.h"
 
 int find_queue(VecDeque *queues);
@@ -117,11 +117,11 @@ void rr_statistics(Job *joblist, int jobnum, int time_slice) {
   //  Initialize the queue of processes
   JobDeque jobs = JobDeque_init();
   for (int i = 0; i < jobnum; i++) {
-    JobDeque_push(&jobs, joblist[i]);
+    JobDeque_push(&jobs, &joblist[i]);
   }
 
   while (!JobDeque_empty(&jobs)) {
-    Job *job = JobDeque_front(&jobs);  // Get the first process in the queue
+    Job *job = *JobDeque_front(&jobs);  // Get the first process in the queue
     JobDeque_pop_front(&jobs);         // Pop the process from the queue
 
     int pid = job->pid;
@@ -139,13 +139,13 @@ void rr_statistics(Job *joblist, int jobnum, int time_slice) {
         printf("[time %6d ] Run process %d for %d secs\n", currtime, pid, round_time);
         printf("process %d yields\n", job->pid);
         // Push the process to the tail of the queue
-        JobDeque_push_back(&jobs, *job);
+        JobDeque_push_back(&jobs, job);
       } else {
         // Current process doesn't yield
         round_time = time_slice;
         printf("[time %6d ] Run process %d for %d secs\n", currtime, pid, round_time);
         // Push the process to the tail of the queue
-        JobDeque_push_back(&jobs, *job);
+        JobDeque_push_back(&jobs, job);
       }
     }
     // Process can be finished in the current time slice
@@ -207,7 +207,7 @@ void mlfq_statistics(Job *joblist, int jobnum, int numQueues, int time_slice, in
   // Add all jobs to the highest priority queue
   queue = VecDeque_at_mut(&queues, 0);
   for (int i = 0; i < jobnum; i++) {
-    JobDeque_push(queue, joblist[i]);
+    JobDeque_push(queue, &joblist[i]);
   }
 
   while (finished_jobs < jobnum) {
@@ -239,7 +239,7 @@ void mlfq_statistics(Job *joblist, int jobnum, int numQueues, int time_slice, in
     }
     // Get the first process of the queue
     JobDeque *curr_queue = VecDeque_at_mut(&queues, index);
-    Job *job = JobDeque_front(curr_queue);
+    Job *job = *JobDeque_front(curr_queue);
     JobDeque_pop_front(curr_queue);
 
     if (response_times[job->pid] == -1) {
@@ -256,7 +256,7 @@ void mlfq_statistics(Job *joblist, int jobnum, int numQueues, int time_slice, in
         printf("[Round %d ] Run process %d at priority %d for %d secs\n", round, job->pid, index,
               time_slices[index] / 2);
         printf("process %d yields\n", job->pid);
-        JobDeque_push(VecDeque_at_mut(&queues, index), *job);
+        JobDeque_push(VecDeque_at_mut(&queues, index), job);
       } else {
         // Current process doesn't yield
         printf("[Round %d ] Run process %d at priority %d for %d secs\n", round, job->pid, index, time_slices[index]);
@@ -264,12 +264,12 @@ void mlfq_statistics(Job *joblist, int jobnum, int numQueues, int time_slice, in
         if (index != numQueues - 1) {
           currtime += time_slices[index];
           job->runtime -= time_slices[index];
-          JobDeque_push(VecDeque_at_mut(&queues, index + 1), *job);
+          JobDeque_push(VecDeque_at_mut(&queues, index + 1), job);
         } else {
           // Current process is in the lowest priority queue
           currtime += time_slices[index];
           job->runtime -= time_slices[index];
-          JobDeque_push(VecDeque_at_mut(&queues, index), *job);
+          JobDeque_push(VecDeque_at_mut(&queues, index), job);
         }
       }
     } else {

@@ -10,9 +10,8 @@ typedef struct Job {
 } Job;
 
 #define i_type JobDeque
-#define i_tag job
-#define i_key struct Job
-#define i_less(a, b) a->runtime < b->runtime
+#define i_key struct Job *
+#define i_less(a,b) a->runtime < b->runtime
 #include "stc/cdeq.h"
 
 Job *init_joblist(int jobnum);

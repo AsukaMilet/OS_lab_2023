@@ -5,9 +5,9 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <sys/stat.h>
 
 /**
  * @brief Opens disk at specified path with the specified number of blocks
@@ -24,7 +24,7 @@ Disk *disk_open(const char *path, size_t blocks_num) {
   }
   disk->disk_io = fopen(path, "ab+");
   // If directory or file does not exist, create it
-  if(disk->disk_io == NULL){
+  if (disk->disk_io == NULL) {
     disk->disk_io = fopen(path, "wb+");
   }
   if (disk->disk_io == NULL) {
@@ -113,7 +113,7 @@ ssize_t disk_read(Disk *disk, size_t block, char *data) {
   if (fseek(disk->disk_io, offset, SEEK_SET) == -1) {
     return -1;  // Error seeking to block
   }
-  
+
   bytes_read = fread(data, sizeof(char), BLOCK_SIZE, disk->disk_io);
   if (bytes_read < BLOCK_SIZE) {
     return -1;  // Error reading from disk

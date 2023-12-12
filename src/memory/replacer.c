@@ -192,7 +192,7 @@ bool FIFOReplacerEvict(FIFOReplacer *replacer, frame_id_t *frame_id) {
       }
     }
   }
-  
+
   *frame_id = evict_frame_id;
   FrameTable_erase(&replacer->node_store_, evict_frame_id);
   replacer->curr_size_--;

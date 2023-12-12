@@ -1,6 +1,6 @@
+#include "memory/buffer_manager.h"
 #include <stddef.h>
 #include "memory/replacer.h"
-#include "memory/buffer_manager.h"
 
 //===----------------------------------------------------------------------===//
 // LRUBufferManager Implementation

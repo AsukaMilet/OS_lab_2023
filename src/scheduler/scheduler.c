@@ -70,7 +70,7 @@ void fifo_statistics(Job *joblist, int jobnum) {
 
   for (int i = 0; i < jobnum; i++) {
     printf("[time %6d ] Run process %d for %d secs (Finished at %d)\n", currtime, joblist[i].pid, joblist[i].runtime,
-          currtime + joblist[i].runtime);
+           currtime + joblist[i].runtime);
     currtime += joblist[i].runtime;
   }
 
@@ -153,7 +153,7 @@ void rr_statistics(Job *joblist, int jobnum, int time_slice) {
       round_time = runtime;
       turnaround_time[pid] = currtime + round_time;
       printf("[time %6d ] Run process %d for %d secs (Finished at %d)\n", currtime, pid, round_time,
-            currtime + round_time);
+             currtime + round_time);
     }
     currtime += round_time;
   }
@@ -254,7 +254,7 @@ void mlfq_statistics(Job *joblist, int jobnum, int numQueues, int time_slice, in
         currtime += time_slices[index] / 2;
         job->runtime -= time_slices[index] / 2;
         printf("[Round %d ] Run process %d at priority %d for %d secs\n", round, job->pid, index,
-              time_slices[index] / 2);
+               time_slices[index] / 2);
         printf("process %d yields\n", job->pid);
         JobDeque_push(VecDeque_at_mut(&queues, index), job);
       } else {
@@ -277,7 +277,7 @@ void mlfq_statistics(Job *joblist, int jobnum, int numQueues, int time_slice, in
       currtime += job->runtime;
       turnaround_times[job->pid] = currtime += job->runtime;
       printf("[Round %d ] Run process %d at priority %d for %d secs (finished at %d)\n", round, job->pid, index,
-            job->runtime, currtime);
+             job->runtime, currtime);
       finished_jobs++;
     }
     round++;
@@ -287,7 +287,7 @@ void mlfq_statistics(Job *joblist, int jobnum, int numQueues, int time_slice, in
   int turnaroundSum = 0, responseSum = 0;
   for (int i = 0; i < jobnum; i++) {
     printf("Process %3d -- Response: %6d, Turnaround: %6d\n", joblist[i].pid, response_times[joblist[i].pid],
-          turnaround_times[joblist[i].pid]);
+           turnaround_times[joblist[i].pid]);
     responseSum += response_times[joblist[i].pid];
     turnaroundSum += turnaround_times[joblist[i].pid];
   }

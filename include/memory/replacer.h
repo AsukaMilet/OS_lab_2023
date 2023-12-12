@@ -1,5 +1,5 @@
-#ifndef MEMORY_H
-#define MEMORY_H
+#ifndef REPLACER_H
+#define REPLACER_H
 
 #define i_type UIList
 #define i_key size_t

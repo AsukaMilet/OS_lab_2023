@@ -6,3 +6,6 @@
 
 # build result
 build/
+
+# Rust Project
+AsukaFS/

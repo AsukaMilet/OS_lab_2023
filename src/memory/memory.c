@@ -87,8 +87,8 @@ void lru_epoch(size_t frames_num, size_t replacer_k) {
   size_t compulsory_miss_num = 0;
   size_t capacity_miss_num = 0;
   LRUBufferManagerGetMissNum(manager, &compulsory_miss_num, &capacity_miss_num);
-  printf("LRU-%zu Missing Rate: compulsory %.2lf, capacity %.2lf\n", replacer_k,
-         (double)compulsory_miss_num / INSTRUCTIONS_NUM, (double)capacity_miss_num / INSTRUCTIONS_NUM);
+  printf("LRU-%zu Missing Rate: %.2lf\n", replacer_k,
+         (double)(compulsory_miss_num + capacity_miss_num) / INSTRUCTIONS_NUM);
 
   LRUBufferManagerDestroy(manager);
 }
@@ -136,8 +136,7 @@ void fifo_epoch(size_t frames_num) {
   size_t compulsory_miss_num = 0;
   size_t capacity_miss_num = 0;
   FIFOBufferManagerGetMissNum(manager, &compulsory_miss_num, &capacity_miss_num);
-  printf("FIFO Missing Rate: compulsory %.2lf, capacity %.2lf\n", (double)compulsory_miss_num / INSTRUCTIONS_NUM,
-         (double)capacity_miss_num / INSTRUCTIONS_NUM);
+  printf("FIFO Missing Rate: %.2lf\n", (double)(compulsory_miss_num + capacity_miss_num) / INSTRUCTIONS_NUM);
 
   FIFOBufferManagerDestroy(manager);
 }
